@@ -48,7 +48,7 @@ class HiddenMarkovModel:
         # Step 1. Initialize variables
         # Initialize probability table
         self.probability_table = np.zeros((m, n))
-        for s in range(1, n)):
+        for s in range(1, n):
             # Update probabilities based on previous states
             self.probability_table[0, s] = self.prior_p[s] * self.emission_p[s, self.observation_states_dict[input_observation_states[0]]]
 
