@@ -37,6 +37,9 @@ def test_mini_weather():
     # Edge cases
     assert hmm_model.forward([]) == 0, "Forward probability should be 0 for empty sequence"
     assert hmm_model.viterbi([]) == [], "Viterbi sequence should be empty for empty sequence"
+    single_observation = [observation_sequence[0]]
+    assert hmm_model.forward(single_observation) > 0, "Forward probability should be valid for a single observation"
+    assert len(hmm_model.viterbi(single_observation)) == 1, "Viterbi sequence should have exactly one state"
 
 def test_full_weather():
 
