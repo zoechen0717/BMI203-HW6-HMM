@@ -32,6 +32,7 @@ def test_mini_weather():
 
     # Validate against expected results
     assert hmm_model.forward(observation_sequence) > 0, "Forward probability should be positive"
+    assert np.isclose(hmm_model.forward(observation_sequence), 0.035064411621093736, atol=1e-6)
     assert hmm_model.viterbi(observation_sequence) == list(expected_viterbi_sequence), "Viterbi sequence does not match expected sequence"
 
     # Edge cases
@@ -68,6 +69,7 @@ def test_full_weather():
 
     # Validate against expected results
     assert hmm_model.forward(observation_sequence) > 0, "Forward probability should be positive"
+    assert np.isclose(hmm_model.forward(observation_sequence), 1.6864513843961297e-11, atol=1e-6)
     assert hmm_model.viterbi(observation_sequence) == list(expected_viterbi_sequence), "Viterbi sequence does not match expected sequence"
     # Edge cases
     same_observation_sequence = [observation_sequence[0]] * len(observation_sequence)

@@ -41,8 +41,8 @@ class HiddenMarkovModel:
             forward_probability (float): forward probability (likelihood) for the input observed sequence
         """
         if len(input_observation_states) == 0:
-        return 0  # Return 0 probability for empty sequence
-        
+            return 0  # Return 0 probability for empty sequence
+
         # Inspired by the psedocode from the pdf file: https://web.stanford.edu/~jurafsky/slp3/A.pdf
         # Get dimentions for probability table
         T = len(input_observation_states)
