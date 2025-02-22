@@ -77,7 +77,8 @@ class HiddenMarkovModel:
         Returns:
             best_hidden_state_sequence(list): most likely list of hidden states that generated the sequence observed states
         """
-
+        if len(decode_observation_states) == 0:
+            return []
         # Step 1. Initialize variables
         N = len(self.hidden_states)
         T = len(decode_observation_states)
