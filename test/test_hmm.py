@@ -17,10 +17,6 @@ def test_mini_weather():
     In addition, check for at least 2 edge cases using this toy model.
     """
 
-    def test_mini_weather():
-    """
-    Test the HMM using the mini weather dataset.
-    """
     mini_hmm = np.load('./data/mini_weather_hmm.npz')
     mini_input = np.load('./data/mini_weather_sequences.npz')
 
