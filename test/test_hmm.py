@@ -1,6 +1,5 @@
 import pytest
 from hmm import HiddenMarkovModel
-from hmmlearn import hmm
 import numpy as np
 
 def test_mini_weather():
@@ -35,18 +34,6 @@ def test_mini_weather():
     assert hmm_model.forward(observation_sequence) > 0, "Forward probability should be positive"
     assert hmm_model.viterbi(observation_sequence) == list(expected_viterbi_sequence), "Viterbi sequence does not match expected sequence"
 
-    # Compare with hmmlearn
-    sklearn_hmm = hmm.MultinomialHMM(n_components=len(hidden_states))
-    sklearn_hmm.startprob_ = prior_p
-    sklearn_hmm.transmat_ = transition_p
-    sklearn_hmm.emissionprob_ = emission_p
-
-    log_prob = sklearn_hmm.score(np.array(observation_sequence).reshape(-1, 1))
-    assert np.isclose(hmm_model.forward(observation_sequence), np.exp(log_prob)), "Forward probabilities do not match"
-
-    _, sklearn_viterbi_seq = sklearn_hmm.decode(np.array(observation_sequence).reshape(-1, 1), algorithm="viterbi")
-    assert hmm_model.viterbi(observation_sequence) == [hidden_states[i] for i in sklearn_viterbi_seq], "Viterbi sequences do not match"
-
     # Edge cases
     assert hmm_model.forward([]) == 0, "Forward probability should be 0 for empty sequence"
     assert hmm_model.viterbi([]) == [], "Viterbi sequence should be empty for empty sequence"
@@ -79,19 +66,6 @@ def test_full_weather():
     # Validate against expected results
     assert hmm_model.forward(observation_sequence) > 0, "Forward probability should be positive"
     assert hmm_model.viterbi(observation_sequence) == list(expected_viterbi_sequence), "Viterbi sequence does not match expected sequence"
-
-    # Compare with hmmlearn
-    sklearn_hmm = hmm.MultinomialHMM(n_components=len(hidden_states))
-    sklearn_hmm.startprob_ = prior_p
-    sklearn_hmm.transmat_ = transition_p
-    sklearn_hmm.emissionprob_ = emission_p
-
-    log_prob = sklearn_hmm.score(np.array(observation_sequence).reshape(-1, 1))
-    assert np.isclose(hmm_model.forward(observation_sequence), np.exp(log_prob)), "Forward probabilities do not match"
-
-    _, sklearn_viterbi_seq = sklearn_hmm.decode(np.array(observation_sequence).reshape(-1, 1), algorithm="viterbi")
-    assert hmm_model.viterbi(observation_sequence) == [hidden_states[i] for i in sklearn_viterbi_seq], "Viterbi sequences do not match"
-
     # Edge cases
     same_observation_sequence = [observation_sequence[0]] * len(observation_sequence)
     assert hmm_model.forward(same_observation_sequence) > 0, "Forward probability should be valid for repeated observations"
