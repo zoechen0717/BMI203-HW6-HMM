@@ -14,9 +14,6 @@ For a helpful refresher on HMMs and the Forward and Viterbi Algorithms you can c
 [here](https://towardsdatascience.com/markov-and-hidden-markov-model-3eec42298d75), and [here](https://pieriantraining.com/viterbi-algorithm-implementation-in-python-a-practical-guide/).
 
 
-
-
-
 ## Tasks and Data
 Please complete the `forward` and `viterbi` functions in the HiddenMarkovModel class.
 
@@ -45,42 +42,50 @@ Within your code, consider the scope of the inputs and how the different paramet
 
 Finally, please update your README with a brief description of your methods.
 
+## Methods description
+This project implements a **Hidden Markov Model (HMM)** and provides functionality for running **Forward** and **Viterbi algorithms** to compute probabilities and decode hidden state sequences. The implementation is validated against the `hmmlearn` library for correctness.
 
+### **1. Forward Algorithm**
+The **Forward algorithm** calculates the probability of an observed sequence given the model parameters (prior, transition, and emission probabilities). The method follows the standard dynamic programming approach:
 
-## Task List
+#### **Steps:**
+  - Initialize the probability matrix `forward[N, T]` where `N` is the number of hidden states and `T` is the sequence length.
+  - Compute initial probabilities using prior and emission probabilities.
+  - Iteratively update probabilities for each time step using transition and emission probabilities.
+  - Compute the final probability by summing over all possible hidden states at the last time step.
 
-[TODO] Complete the HiddenMarkovModel Class methods  <br>
-  [ ] complete the `forward` function in the HiddenMarkovModelClass <br>
-  [ ] complete the `viterbi` function in the HiddenMarkovModelClass <br>
+#### **Edge Cases Handled:**
+- Empty sequences return `0` probability.
+- Handles numerical stability using log-space calculations if necessary.
 
-[TODO] Unit Testing  <br>
-  [ ] Ensure functionality on mini and full weather dataset <br>
-  [ ] Account for edge cases
+### **2. Viterbi Algorithm**
+The **Viterbi algorithm** finds the most likely sequence of hidden states given an observation sequence.
 
-[TODO] Packaging <br>
-  [ ] Update README with description of your methods <br>
-  [ ] pip installable module (optional)<br>
-  [ ] github actions (install + pytest) (optional)
+#### **Steps:**
+  - Initialize the Viterbi probability table and backpointer table.
+  - Compute initial state probabilities using prior and emission probabilities.
+  - Iteratively compute the maximum probability for each state at every time step using transition probabilities.
+  - Store the best previous state for backtracking.
+  - Identify the best final state and reconstruct the optimal hidden state sequence using the backpointer table.
 
+#### **Edge Cases Handled:**
+- Empty sequences return an empty state sequence.
+- Handles zero transition probabilities correctly.
 
-## Completing the Assignment
-Push your code to GitHub with passing unit tests, and submit a link to your repository [here](https://forms.gle/xw98ZVQjaJvZaAzSA)
+### **3. Model Validation using `hmmlearn`**
+To ensure correctness, the implementation is compared with the `hmmlearn` library:
 
-### Grading
+- **Forward probabilities** computed by our implementation are compared to `hmmlearn`'s log-likelihood scores.
+- **Viterbi sequences** are validated by comparing outputs with `hmmlearn`'s decoding results.
+- **Tolerance-based assertions (`np.isclose`)** are used to ensure floating-point accuracy.
 
-* Algorithm implementation (6 points)
-    * Forward algorithm is correct (2)
-    * Viterbi is correct (2)
-    * Output is correct on small weather dataset (1)
-    * Output is correct on full weather dataset (1)
+### **4. Edge Cases Considered**
+This implementation handles various edge cases, ensuring robustness:
 
-* Unit Tests (3 points)
-    * Mini model unit test (1)
-    * Full model unit test (1)
-    * Edge cases (1)
-
-* Style (1 point)
-    * Readable code and updated README with a description of your methods
-
-* Extra credit (0.5 points)
-    * Pip installable and Github actions (0.5)
+- **Empty observation sequences** (`[]`) return `0` probability and an empty hidden state sequence.
+- **Single observation sequences** are correctly processed.
+- **All identical observations** do not affect numerical stability.
+- **Transition matrices with zero probabilities** correctly prevent invalid transitions.
+- **Extremely long sequences** are tested to check numerical stability and efficiency.
+---
+This project provides a robust and well-tested implementation of the Hidden Markov Model, ensuring accuracy and efficiency for sequence analysis tasks.
